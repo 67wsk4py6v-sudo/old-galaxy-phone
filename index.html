@@ -79,7 +79,6 @@ button{cursor:pointer}
 <script>
 const $=id=>document.getElementById(id);
 const initial=[];
-let people = [];
 let people;
 try {
   if (localStorage.getItem("galaxyResetDone") !== "yes") {
@@ -92,7 +91,6 @@ try {
 }
 const save=()=>{try{localStorage.setItem("galaxyPeople",JSON.stringify(people))}catch(e){}};
 let current=0;
-const save=()=>{try{localStorage.setItem("galaxyPeople",JSON.stringify(people))}catch(e){}};
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const now=()=>{let d=new Date(),h=d.getHours();return (h>=12?"오후 ":"오전 ")+(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0")};
 function avatar(p){return `<span class="avatar">${p.photo?`<img src="${esc(p.photo)}" onerror="this.style.display='none'">`:"👤"}</span>`}
