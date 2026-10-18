@@ -229,6 +229,10 @@ localStorage.setItem(
 }
 function simplePage(name){page(name,`<div class="form"><h3>${name}</h3><p>옛날 갤럭시 느낌의 ${name} 화면이야.</p>${name==="메모"?`<textarea id="memo" placeholder="메모를 입력해 줘"></textarea><button class="btn" onclick="localStorage.setItem('galaxyMemo',$('memo').value);alert('메모를 저장했어!')">저장</button>`:name==="갤러리"?`<p>가상 사진은 연락처 수정에서 이미지 URL을 넣어 등록할 수 있어.</p>`:`<p>상황극용 화면</p>`}</div>`);if(name==="메모")$("memo").value=localStorage.getItem("galaxyMemo")||""}
 function tick(){let d=new Date(),h=d.getHours(),t=(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0");$("st").textContent=(h>=12?"오후 ":"오전 ")+t;let c=$("clock");if(c)c.textContent=t;let ht=$("ht");if(ht)ht.textContent=t}
+<script>
+localStorage.removeItem("galaxyChenleNewsIncident_v1");
+localStorage.removeItem("galaxyChenleCallState_v1");
+
 showLock();
 setInterval(tick,1000);
 runIncident();
