@@ -80,9 +80,16 @@ button{cursor:pointer}
 const $=id=>document.getElementById(id);
 const initial=[];
 let people = [];
+let people;
 try {
-  localStorage.removeItem("galaxyPeople");
-} catch(e) {}
+  if (localStorage.getItem("galaxyResetDone") !== "yes") {
+    localStorage.removeItem("galaxyPeople");
+    localStorage.setItem("galaxyResetDone", "yes");
+  }
+  people = JSON.parse(localStorage.getItem("galaxyPeople")) || initial;
+} catch(e) {
+  people = initial;
+}
 const save=()=>{try{localStorage.setItem("galaxyPeople",JSON.stringify(people))}catch(e){}};
 let current=0;
 const save=()=>{try{localStorage.setItem("galaxyPeople",JSON.stringify(people))}catch(e){}};
