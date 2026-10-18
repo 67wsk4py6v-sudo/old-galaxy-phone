@@ -78,16 +78,12 @@ button{cursor:pointer}
 </div>
 <script>
 const $=id=>document.getElementById(id);
-const initial=[
-{name:"시보-강민재",photo:"",time:"오후 11:32",messages:[{text:"저 아직 기다리고 있어요.",me:false,time:"오후 11:32"}]},
-{name:"최종현",photo:"",time:"오후 10:58",messages:[{text:"차 검사. 나 아직 기다린다",me:false,time:"오후 10:58"}]},
-{name:"장태식",photo:"",time:"4월 2일",messages:[{text:"어디 가실 거면 말이라도 하고 가지.",me:false,time:"오후 9:14"}]},
-{name:"이예진 검사",photo:"",time:"3월 31일",messages:[{text:"몸 멀쩡히 잘 지내고 계신 거죠?",me:false,time:"오후 6:30"}]},
-{name:"조아영",photo:"",time:"3월 27일",messages:[{text:"이게 무슨 초라한 꼴이야.",me:false,time:"오후 4:21"}]},
-{name:"박정호",photo:"",time:"3월 7일",messages:[{text:"살아 있었으면 예순둘이에요. 그냥 생각나서요.",me:false,time:"오후 8:10"}]}
-];
-let people;
-try{people=JSON.parse(localStorage.getItem("galaxyPeople"))||initial}catch(e){people=initial}
+const initial=[];
+let people = [];
+try {
+  localStorage.removeItem("galaxyPeople");
+} catch(e) {}
+const save=()=>{try{localStorage.setItem("galaxyPeople",JSON.stringify(people))}catch(e){}};
 let current=0;
 const save=()=>{try{localStorage.setItem("galaxyPeople",JSON.stringify(people))}catch(e){}};
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
