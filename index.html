@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Old Galaxy Phone</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090b10;font-family:Arial,"Apple SD Gothic Neo",sans-serif;color:white}
+button{font:inherit;cursor:pointer}
+#phone{width:100%;max-width:430px;min-height:100dvh;margin:auto;background:#07101e;position:relative;overflow:hidden}
+.status{height:30px;background:#17191d;display:flex;justify-content:space-between;align-items:center;padding:0 13px;font-size:13px}
+.screen{min-height:calc(100dvh - 78px);position:relative;overflow:hidden}
+.wallpaper{background:radial-gradient(ellipse at 25% 15%,#d7f7ff 0%,#7edbff 15%,transparent 38%),radial-gradient(ellipse at 85% 38%,#63d7ff 0%,transparent 35%),linear-gradient(145deg,#159be9,#0873df 45%,#063d9d 80%,#05235e)}
+.lock{display:flex;flex-direction:column;align-items:center;padding:48px 20px 30px;text-shadow:0 2px 5px #245b8a}
+.clock{font-size:65px;font-weight:300;letter-spacing:-3px}
+.date{font-size:18px;margin-top:8px}
+.notice{margin-top:50px;background:#092f5b9c;border:1px solid #9adfff66;border-radius:9px;padding:15px;width:100%;font-size:15px}
+.hint{margin:12px 0 25px;font-size:15px}
+.pattern{width:230px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px 34px;padding:8px}
+.dot{width:43px;height:43px;border:3px solid #d7efff88;border-radius:50%;background:#bce8ff33;display:grid;place-items:center}
+.dot:after{content:"";width:12px;height:12px;border-radius:50%;background:#fff}
+.home{padding:17px 13px 20px;min-height:calc(100dvh - 108px)}
+.widget{padding:22px 16px;background:#a9e5ff36;border:1px solid #ffffff55;border-radius:12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 12px #073e7855}
+.bigtime{font-size:42px;font-weight:300}
+.small{font-size:12px;color:#e5f5ff;margin-top:5px}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:25px 8px;margin-top:35px}
+.app{border:0;background:transparent;color:white;text-align:center;padding:0;min-width:0;text-shadow:0 2px 3px #123}
+.appicon{width:58px;height:58px;border-radius:14px;margin:0 auto 8px;display:grid;place-items:center;font-size:30px;color:white;border:2px solid #ffffff66;box-shadow:inset 0 2px 4px #ffffff88,0 3px 5px #123;font-weight:bold}
+.app span:last-child{font-size:13px}
+.blue{background:linear-gradient(#83d6ff,#1473d0)}
+.yellow{background:linear-gradient(#fff4a4,#e9b51c);color:#72521a}
+.orange{background:linear-gradient(#ffd08d,#e97622)}
+.purple{background:linear-gradient(#f2baff,#a345ce)}
+.green{background:linear-gradient(#b5f3a3,#26a54c)}
+.white{background:linear-gradient(#fff,#b9c7d8);color:#333}
+.dock{position:absolute;bottom:0;left:0;right:0;background:#052e65b8;display:grid;grid-template-columns:repeat(4,1fr);padding:12px 5px 16px;border-top:1px solid #ffffff44}
+.dock .appicon{width:51px;height:51px}
+.nav{height:48px;background:linear-gradient(#25282d,#090a0d);display:flex;align-items:center;justify-content:space-around;color:#b9bdc5;font-size:23px}
+.page{min-height:calc(100dvh - 78px);background:#08090c}
+.bar{height:51px;background:linear-gradient(#555b64,#17191d);padding:15px;font-size:18px;font-weight:bold;border-bottom:1px solid #555}
+.back{border:0;background:transparent;color:white;margin-right:15px;font-size:20px}
+.rowitem{width:100%;border:0;border-bottom:1px solid #303136;background:#08090c;color:white;text-align:left;display:flex;align-items:center;gap:13px;padding:15px 12px;min-height:84px}
+.avatar{width:52px;height:58px;background:linear-gradient(#777f8c,#404651);border-radius:7px;display:grid;place-items:center;font-size:27px;flex-shrink:0}
+.rowtext{min-width:0;flex:1}
+.name{font-size:17px;font-weight:bold;margin-bottom:7px}
+.preview{color:#a5a5aa;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.time{color:#999;font-size:12px;white-space:nowrap}
+.badge{background:#329fe9;border-radius:20px;padding:5px 9px;margin-top:6px;display:inline-block}
+.chathead{text-align:center;padding:17px;background:#17191e;border-bottom:1px solid #333;font-weight:bold}
+.chatbody{padding:15px;min-height:55vh;display:flex;flex-direction:column;gap:12px}
+.bubble{padding:12px 14px;border-radius:15px;max-width:82%;font-size:15px;line-height:1.5;background:#33363e;align-self:flex-start;white-space:pre-wrap;overflow-wrap:anywhere}
+.bubble.me{background:#267ed4;align-self:flex-end}
+.chatinput{display:flex;gap:7px;padding:12px;background:#15171c;position:sticky;bottom:0}
+.chatinput input{flex:1;min-width:0;border-radius:20px;border:1px solid #555;background:#282a30;color:white;padding:11px}
+.send{background:#2789dc;color:white;border:0;border-radius:18px;padding:0 16px}
+.simple{padding:18px}
+.simple input,.simple textarea{width:100%;background:#22252c;color:white;border:1px solid #555;border-radius:8px;padding:12px;margin:8px 0}
+.simple button{background:#2185d0;border:0;border-radius:7px;padding:10px 14px;color:white;margin:5px 4px 5px 0}
+.note{padding:13px;border-bottom:1px solid #333;white-space:pre-wrap}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="phone">
+<div class="status"><span>✉</span><span>▮▮▮ 3G ▣ <span id="statusTime">오후 11:48</span></span></div>
+<main id="screen" class="screen wallpaper"></main>
+<div class="nav"><span>▤</span><span>▱</span><span>↶</span></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const people=[
+{name:"시보-강민재",msg:"저 아직 기다리고 있어요.",time:"오후 11:32",unread:21},
+{name:"최종현",msg:"차 검사. 나 아직 기다린다",time:"오후 10:58",unread:8},
+{name:"장태식",msg:"어디 가실거면 말이라도 하고 가지.",time:"4월 2일",unread:8},
+{name:"형사3부-이예진 검사",msg:"몸 멀쩡히 어디 해외 가서 피서나 하고 있다고 생각...",time:"3월 31일",unread:7},
+{name:"조아영",msg:"이게 무슨 초라한 꼴이야",time:"3월 27일",unread:5},
+{name:"피해자 유족-박정호",msg:"살아 있었으면 예순둘이에요. 그냥 생각나서요.",time:"3월 7일",unread:2}
+];
+let chats={};
+people.forEach((p,i)=>chats[i]=[{text:p.msg,me:false}]);
+let notes=["오늘 할 일\n- 연락하기\n- 약속 확인"];
+let current=0;
+function clock(){let d=new Date();return d.getHours()+":"+String(d.getMinutes()).padStart(2,"0")}
+function showLock(){
+$("screen").className="screen wallpaper";
+$("screen").innerHTML=`<div class="lock">
+<div class="clock" id="clock">11:48</div><div class="date">4월 3일 화요일</div>
+<div class="notice">✉　새 메시지 ${people.reduce((a,p)=>a+p.unread,0)}개</div>
+<div class="hint">잠금 해제 패턴을 그리세요</div>
+<div class="pattern">${Array.from({length:9},(_,i)=>`<button class="dot" aria-label="패턴 점 ${i+1}" onclick="unlock()"></button>`).join("")}</div>
+<button onclick="showHome()" style="margin-top:30px;padding:10px 18px;border:1px solid #ffffff77;border-radius:20px;color:white;background:#134e8a88">잠금 해제</button>
+</div>`;
+}
+function app(icon,label,color,action){return `<button class="app" onclick="${action}"><span class="appicon ${color}">${icon}</span><span>${label}</span></button>`}
+function showHome(){
+$("screen").className="screen wallpaper";
+$("screen").innerHTML=`<div class="home">
+<div class="widget"><div><div class="bigtime" id="homeclock">11:48</div><div>4월 3일 화요일</div></div><div style="text-align:right">서울<br><br>9°<br>맑음</div></div>
+<div class="apps">
+${app("◎","인터넷","blue","showInternet()")}
+${app("3","캘린더","white","showCalendar()")}
+${app("▤","메모","yellow","showNotes()")}
+${app("◷","시계","white","showClock()")}
+${app("▧","갤러리","orange","showGallery()")}
+${app("♫","음악","purple","showMusic()")}
+</div></div>
+<div class="dock">
+${app("☎","전화","green","showContacts()")}
+${app("▣","연락처","orange","showContacts()")}
+${app("✉","메시지","yellow","showMessages()")}
+${app("▦","애플리케이션","blue","showAllApps()")}
+</div>`;
+}
+function page(title,html){$("screen").className="screen page";$("screen").innerHTML=`<div class="bar"><button class="back" onclick="showHome()">‹</button>${title}</div>${html}`}
+function showMessages(){
+page("메시지",people.map((p,i)=>`<button class="rowitem" onclick="showChat(${i})"><span class="avatar">●</span><span class="rowtext"><div class="name">${p.name}</div><div class="preview">${escapeHTML(p.msg)}</div></span><span class="time">${p.time}<br><span class="badge">${p.unread}</span></span></button>`).join(""));
+}
+function showContacts(){
+page("연락처",`<div class="simple"><input id="newname" placeholder="이름 추가"><input id="newmsg" placeholder="첫 문자 내용"><button onclick="addPerson()">연락처 추가</button></div>`+people.map((p,i)=>`<button class="rowitem" onclick="showChat(${i})"><span class="avatar">●</span><span class="rowtext"><div class="name">${p.name}</div><div class="preview">가상 연락처 · 대화 보기</div></span>›</button>`).join(""));
+}
+function addPerson(){
+let n=$("newname").value.trim(),m=$("newmsg").value.trim()||"안녕!";
+if(!n){alert("이름을 입력해 줘.");return}
+people.unshift({name:n,msg:m,time:"방금",unread:1});chats={0:[{text:m,me:false}],...Object.fromEntries(Object.entries(chats).map(([k,v])=>[+k+1,v]))};showContacts();
+}
+function showChat(i){
+current=i;
+page("메시지",`<div class="chathead">${escapeHTML(people[i].name)}</div><div class="chatbody" id="chatbody"></div><form class="chatinput" onsubmit="sendMessage(event)"><input id="chattext" placeholder="메시지 입력..." autocomplete="off"><button class="send">전송</button></form>`);
+renderChat();
+}
+function renderChat(){
+let c=$("chatbody");if(!c)return;
+c.innerHTML=(chats[current]||[]).map(m=>`<div class="bubble ${m.me?"me":""}">${escapeHTML(m.text)}</div>`).join("");
+}
+function sendMessage(e){
+e.preventDefault();let input=$("chattext"),t=input.value.trim();if(!t)return;
+chats[current].push({text:t,me:true});people[current].msg=t;people[current].time="방금";renderChat();input.value="";
+}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function showNotes(){page("메모",`<div class="simple"><textarea id="notetext" rows="8">${escapeHTML(notes.join("\n\n"))}</textarea><button onclick="notes=[$('notetext').value];alert('메모를 저장했어!')">저장</button></div>`)}
+function showCalendar(){page("캘린더",`<div class="simple"><h2>4월</h2><p>3일 화요일</p><p>오늘의 일정</p><input id="event" placeholder="일정 입력"><button onclick="alert($('event').value+' 일정 추가!')">일정 추가</button></div>`)}
+function showClock(){page("시계",`<div class="simple" style="text-align:center"><div style="font-size:54px" id="bigclock">11:48</div><p>알람　세계 시각　스톱워치</p><button onclick="alert('알람이 설정된 것처럼 표시됩니다.')">알람 설정</button></div>`)}
+function showGallery(){page("갤러리",`<div class="simple"><p>사진이 아직 없어요.</p><p>상황극에 사용할 가상 사진을 추가하는 기능은 다음 버전에서 확장할 수 있어.</p></div>`)}
+function showMusic(){page("음악",`<div class="simple" style="text-align:center"><div style="font-size:65px">♫</div><p>재생 중인 음악 없음</p><button onclick="alert('재생 목록이 비어 있어요.')">▶ 재생</button></div>`)}
+function showInternet(){page("인터넷",`<div class="simple"><p>웹페이지를 탐색하는 화면</p><input placeholder="주소 또는 검색어"><button onclick="alert('이 데모에서는 실제 웹 탐색을 하지 않아요.')">이동</button></div>`)}
+function showAllApps(){page("애플리케이션",`<div class="simple"><button onclick="showContacts()">연락처</button><button onclick="showMessages()">메시지</button><button onclick="showNotes()">메모</button><button onclick="showGallery()">갤러리</button><button onclick="showClock()">시계</button></div>`)}
+function unlock(){showHome()}
+showLock();
+setInterval(()=>{let d=new Date();let h=d.getHours(),t=(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0");let period=h>=12?"오후":"오전";$("statusTime").textContent=period+" "+t;let c=$("clock");if(c)c.textContent=t;let hc=$("homeclock");if(hc)hc.textContent=t;let bc=$("bigclock");if(bc)bc.textContent=t},1000);
+</script>
+</body>
+</html>
