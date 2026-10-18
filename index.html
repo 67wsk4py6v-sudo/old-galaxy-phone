@@ -50,6 +50,8 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 .form input,.form textarea{width:100%;background:#22252c;color:white;border:1px solid #555;border-radius:7px;padding:11px;margin-top:6px}
 .form textarea{min-height:100px;resize:vertical}.btn{background:#2185d0;color:white;border:0;border-radius:7px;padding:11px 13px;margin:8px 5px 5px 0}.secondary{background:#414650}
 .info{padding:15px;color:#aaa;font-size:12px;line-height:1.6}
+.callveil{position:fixed;inset:0;z-index:20;background:linear-gradient(160deg,#233b54,#07101e 65%,#02060b);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:12vh 24px 8vh;text-align:center}
+.calltop{font-size:13px;color:#d7e6f4;letter-spacing:2px}.callavatar{width:112px;height:112px;border-radius:50%;background:linear-gradient(#9da9b7,#4b5665);display:grid;place-items:center;font-size:52px;border:3px solid #ffffff66;margin:28px auto 20px}.callname{font-size:30px;font-weight:500}.callstatus{margin-top:12px;color:#d6e2ee}.callbuttons{width:100%;display:flex;justify-content:space-around;align-items:center;gap:30px}.callbtn{border:0;border-radius:50%;width:72px;height:72px;color:#fff;font-size:30px;box-shadow:0 5px 18px #0006}.reject{background:#e84444}.answer{background:#26b765}.hangup{background:#e84444}.callhint{font-size:12px;color:#b7c8d8;margin-top:18px}.calllogrow{padding:14px;border-bottom:1px solid #333;display:flex;gap:12px;align-items:center}.calllogrow .who{flex:1}.missed{color:#ff6464}.calllogrow small{display:block;color:#999;margin-top:5px}
 </style>
 </head>
 <body>
@@ -71,7 +73,6 @@ const save=()=>{try{localStorage.setItem("galaxyPeople",JSON.stringify(people))}
 let current=0;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const now=()=>{let d=new Date(),h=d.getHours();return (h>=12?"오후 ":"오전 ")+(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0")};
-const shortTime=s=>s||"";
 function avatar(p){return `<span class="avatar">${p.photo?`<img src="${esc(p.photo)}" onerror="this.style.display='none'">`:"👤"}</span>`}
 function app(icon,label,color,fn){return `<button class="app" onclick="${fn}"><span class="appicon ${color}">${icon}</span><span>${label}</span></button>`}
 function showLock(){
@@ -125,89 +126,82 @@ function send(e){
  p.messages.push({text,me:true,time:t});p.time=t;save();renderChat();input.value="";
  // 자동 답장은 보내지 않아요. 사건에 따른 연락만 별도로 도착해요.
 }
-
-// 천러 관련 기사가 뜬 뒤 연락이 몰려오는 사건 시스템
-// 사이트를 닫아도 시작 시각과 진행 단계가 저장되어, 다시 열면 밀린 연락이 한꺼번에 도착해요.
 const incidentKey="galaxyChenleNewsIncident_v1";
 const incidentTimeline=[
- {after:0, messages:[
-  ["런쥔","기사 봤어? 지금 괜찮아? "],
-  ["제노","너 지금 무슨 상황인지 알아? 전화 돼?"],
-  ["매니저형","천러야, 기사 확인했어. 지금 어디야? 일단 전화부터 받아."]
- ]},
- {after:12000, messages:[
-  ["해찬","야 너 괜찮은 거 맞지? "],
-  ["재민","천러야, 이거 보면 답장해 줘."],
-  ["박지성","천러야"]
- ]},
- {after:30000, messages:[
-  ["매니저형","회사에서도 연락 왔어."],
-  ["회사 담당자","천러 씨, 관련 기사 확산 상황을 확인 중입니다. 연락 가능한 즉시 회신 부탁드립니다."],
-  ["런쥔","천러야, 나한테라도 한마디 해. 다들 너 찾고 있어."]
- ]},
- {after:55000, messages:[
-  ["제노","회사 쪽에서 추가 확인 중이래. 지금 혼자 있는 거야?"],
-  ["해찬","무슨 일 생긴 건 아니지?"],
-  ["매니저형","전화 계속 안 받으면 찾아갈 수밖에 없어."]
- ]},
- {after:90000, messages:[
-  ["회사 담당자","현재 상황을 확인할 수 있도록 통화 부탁드립니다."],
-  ["재민","천러야, 답장 안 해도 되니까 메시지 확인 표시 하나만 해 줘. 걱정돼."],
-  ["박지성","어디야? 집이야? 전화 좀 받아 주라"]
- ]},
- {after:135000, messages:[
-  ["매니저형","천러야, 너 연락 안 돼서 다들 걱정하고 있어."]
- ]},
- {after:195000, messages:[
-  ["해찬","너 괜찮은 거 맞지"],
- {after:270000, messages:[
-  ["매니저형","천러야, 연락 오는 거 하나라도 확인하면 바로 답해. 회사도 상황 심각하게 보고 있어."],
- {after:360000, messages:[
-  ["박지성","종천러"],
-  ["매니저형","천러야. 지금 괜찮은지만 알려 줘."]
- ]}
+ {after:0,messages:[["런쥔","천러야 기사 봤어? 지금 괜찮아? 연락 좀 줘."],["제노","방금 기사 봤는데 무슨 상황인지 알아? 전화 가능해?"],["매니저형","천러야, 기사 확인했어. 지금 어디야? 우선 전화부터 받아."]]},
+ {after:12000,messages:[["해찬","야 너 괜찮은 거 맞지? 단톡도 안 보고 뭐 해."],["재민","천러야, 기사 내용이 사실인지 아닌지보다 네가 괜찮은지가 먼저야. 답장해 줘."],["박지성","형 연락이 안 돼서요… 혹시 휴대폰 못 보고 있는 거예요?"]]},
+ {after:30000,messages:[["매니저형","회사에서도 연락 왔어. 지금 바로 통화해야 해. 어디 있는지 알려 줘."],["회사 담당자","천러 씨, 관련 기사 확산 상황을 확인 중입니다. 연락 가능한 즉시 담당 매니저에게 회신 부탁드립니다."],["런쥔","천러야, 나한테라도 한마디 해. 다들 너 찾고 있어."]]},
+ {after:55000,messages:[["제노","회사 쪽에서 추가 확인 중이래. 지금 혼자 있는 거야?"],["해찬","기사 하나로 끝나는 분위기가 아닌 것 같은데… 너한테 무슨 일 생긴 건 아니지?"],["매니저형","전화 계속 안 받으면 직접 확인하러 갈 수밖에 없어. 위치라도 보내."]]},
+ {after:90000,messages:[["회사 담당자","추가 게시물이 올라와 온라인 반응이 커지고 있습니다. 현재 상황을 확인할 수 있도록 담당자와 통화 부탁드립니다."],["재민","천러야, 답장 안 해도 되니까 메시지 하나만 확인 표시해 줘. 진짜 걱정돼."],["박지성","형, 무슨 일이든 혼자 감당하지 마요. 우리 다 기다리고 있어요."]]},
+ {after:135000,messages:[["런쥔","방금 새로운 글까지 올라왔어. 이거 네가 직접 본 거 맞아?"],["제노","매니저형이 너랑 연락이 안 된다고 했어. 나 지금 전화 다시 할게."],["매니저형","천러야, 이건 그냥 기사 대응 문제만이 아니야. 네가 연락이 안 돼서 다들 걱정하고 있어. 제발 답장해."]]},
+ {after:195000,messages:[["회사 담당자","현재 추가 확인이 필요한 내용이 있습니다. 사실관계 확인 전까지 개인 계정에 별도 게시물을 올리지 말아 주세요. 담당 매니저와 연락 부탁드립니다."],["해찬","야… 진짜 무슨 일 있는 거 아니지? 아까부터 분위기가 너무 이상해."],["재민","우리 지금 다 연락 돌리고 있어. 네가 어디 있는지만 알려 줘. 부탁이야."]]},
+ {after:270000,messages:[["매니저형","천러야, 지금부터 연락 오는 거 하나라도 확인하면 바로 답해. 회사도 상황 심각하게 보고 있어."],["런쥔","기사 내용이 계속 바뀌고 있어. 네 얘기를 직접 듣기 전에는 아무것도 판단 안 할게. 연락 줘."],["제노","나 계속 전화하고 있어. 제발 무사하다고만 해 줘."]]},
+ {after:360000,messages:[["회사 담당자","상황이 계속 확산되고 있어 담당 매니저와의 긴급 확인이 필요합니다. 연락이 닿는 즉시 회신 부탁드립니다."],["박지성","형… 다들 기다리고 있어요. 저도 계속 휴대폰 보고 있어요."],["매니저형","천러야. 부탁이다. 지금 어디 있는지, 괜찮은지만 알려 줘. 더는 기다리기 힘들어."]]}
 ];
-function incidentTime(ms){
- const d=new Date(ms),h=d.getHours();
- return (h>=12?"오후 ":"오전 ")+(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0");
-}
+function incidentTime(ms){const d=new Date(ms),h=d.getHours();return (h>=12?"오후 ":"오전 ")+(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0")}
 function ensureIncidentContacts(){
- const extras=[
-  {name:"매니저형",photo:"",messages:[],unread:0},
-  {name:"회사 담당자",photo:"",messages:[],unread:0}
- ];
- let changed=false;
- extras.forEach(x=>{if(!people.some(p=>p.name===x.name)){people.push({...x,time:""});changed=true;}});
- if(changed)save();
+ [{name:"매니저형"},{name:"회사 담당자"}].forEach(x=>{if(!people.some(p=>p.name===x.name))people.push({...x,photo:"",messages:[],unread:0,time:""})});
+ save();
 }
 function runIncident(){
- ensureIncidentContacts();
- let state;
+ ensureIncidentContacts();let state;
  try{state=JSON.parse(localStorage.getItem(incidentKey)||"null")}catch(e){state=null}
- if(!state||!state.startAt){state={startAt:Date.now(),step:0};localStorage.setItem(incidentKey,JSON.stringify(state));}
- const elapsed=Date.now()-state.startAt;
- let changed=false;
- while(state.step<incidentTimeline.length && elapsed>=incidentTimeline[state.step].after){
+ if(!state||!state.startAt){state={startAt:Date.now(),step:0};localStorage.setItem(incidentKey,JSON.stringify(state))}
+ const elapsed=Date.now()-state.startAt;let changed=false;
+ while(state.step<incidentTimeline.length&&elapsed>=incidentTimeline[state.step].after){
   const stage=incidentTimeline[state.step];
   stage.messages.forEach(([name,text],j)=>{
    let i=people.findIndex(p=>p.name===name);
-   if(i<0){
-    people.push({name,photo:"",messages:[],unread:0,time:""});i=people.length-1;
-   }
-   const p=people[i];
-   const scheduled=state.startAt+stage.after+j*1800;
-   p.messages.push({text,me:false,time:incidentTime(scheduled),incident:true});
-   p.time=incidentTime(scheduled);
-   if(current!==i)p.unread=(p.unread||0)+1;
-   changed=true;
+   if(i<0){people.push({name,photo:"",messages:[],unread:0,time:""});i=people.length-1}
+   const p=people[i],scheduled=state.startAt+stage.after+j*1800;
+   p.messages.push({text,me:false,time:incidentTime(scheduled),incident:true});p.time=incidentTime(scheduled);
+   if(current!==i)p.unread=(p.unread||0)+1;changed=true;
   });
   state.step++;
  }
- if(changed){save();localStorage.setItem(incidentKey,JSON.stringify(state));if($("cb"))renderChat();}
+ if(changed){save();localStorage.setItem(incidentKey,JSON.stringify(state));if($("cb"))renderChat()}
 }
-function startIncidentSystem(){runIncident();setInterval(runIncident,3000);}
-
-function showAll(){page("애플리케이션",`<div class="form"><button class="btn" onclick="showContacts()">연락처</button><button class="btn" onclick="showMessages()">메시지</button><button class="btn" onclick="simplePage('메모')">메모</button><button class="btn" onclick="simplePage('갤러리')">갤러리</button><button class="btn" onclick="simplePage('시계')">시계</button></div>`)}
+function showAll(){page("애플리케이션",`<div class="form"><button class="btn" onclick="showContacts()">연락처</button><button class="btn" onclick="showMessages()">메시지</button><button class="btn" onclick="showCallLog()">📞 통화 기록</button><button class="btn" onclick="simplePage('메모')">메모</button><button class="btn" onclick="simplePage('갤러리')">갤러리</button><button class="btn" onclick="simplePage('시계')">시계</button></div>`)}
+const callLogKey="galaxyChenleCallLog_v1";
+const callTimeline=[
+ {after:18000,name:"런쥔",reason:"기사 보고 걱정돼서 전화했어"},
+ {after:72000,name:"매니저형",reason:"긴급 확인이 필요해"},
+ {after:150000,name:"제노",reason:"연락이 안 돼서 전화했어"},
+ {after:285000,name:"회사 담당자",reason:"상황 확인 요청"},
+ {after:420000,name:"해찬",reason:"천러야, 전화 좀 받아 봐"}
+];
+let activeCall=null,callInterval=null;
+function getCallLog(){try{return JSON.parse(localStorage.getItem(callLogKey)||"[]")}catch(e){return []}}
+function addCallLog(name,type,stamp){let a=getCallLog();a.unshift({name,type,time:incidentTime(stamp||Date.now())});localStorage.setItem(callLogKey,JSON.stringify(a))}
+function showIncomingCall(name,reason,stamp){
+ if(activeCall){addCallLog(name,"부재중 전화",stamp);return}
+ activeCall={name,reason,stamp:stamp||Date.now(),answered:false};
+ const veil=document.createElement("div");veil.className="callveil";veil.id="callveil";
+ veil.innerHTML=`<div class="calltop">GALAXY · 수신 전화</div><div><div class="callavatar">${name.includes("회사")?"🏢":name.includes("매니저")?"👔":"👤"}</div><div class="callname">${esc(name)}</div><div class="callstatus">휴대전화로 전화가 오고 있습니다</div><div class="callhint">${esc(reason)}</div></div><div class="callbuttons"><div><button class="callbtn reject" onclick="declineCall()">☎</button><div class="callhint">거절</div></div><div><button class="callbtn answer" onclick="answerCall()">☎</button><div class="callhint">받기</div></div></div>`;
+ document.body.appendChild(veil);
+ callInterval=setTimeout(()=>{if(activeCall&&!activeCall.answered)declineCall(true)},25000);
+}
+function declineCall(){if(!activeCall)return;clearTimeout(callInterval);addCallLog(activeCall.name,"부재중 전화",activeCall.stamp);const v=document.getElementById("callveil");if(v)v.remove();activeCall=null}
+function answerCall(){
+ if(!activeCall)return;clearTimeout(callInterval);activeCall.answered=true;addCallLog(activeCall.name,"받은 전화",activeCall.stamp);
+ const name=activeCall.name,v=document.getElementById("callveil");if(!v)return;
+ v.innerHTML=`<div class="calltop">GALAXY · 통화 중</div><div><div class="callavatar">${name.includes("회사")?"🏢":name.includes("매니저")?"👔":"👤"}</div><div class="callname">${esc(name)}</div><div class="callstatus" id="calltimer">00:01</div><div class="callhint">가상 통화 화면 · 실제 통화는 연결되지 않아요</div><div class="callhint">${esc(activeCall.reason)}</div></div><div class="callbuttons"><div><button class="callbtn hangup" onclick="endCall()">☎</button><div class="callhint">통화 종료</div></div></div>`;
+ let sec=1;callInterval=setInterval(()=>{const el=document.getElementById("calltimer");if(el){sec++;el.textContent=String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")}},1000)
+}
+function endCall(){if(callInterval)clearInterval(callInterval);const v=document.getElementById("callveil");if(v)v.remove();activeCall=null;callInterval=null}
+function showCallLog(){const log=getCallLog();page("통화 기록",log.length?log.map(c=>`<div class="calllogrow">${c.type.includes("부재중")?'<span class="missed">☎</span>':'<span>☎</span>'}<span class="who">${esc(c.name)}<small class="${c.type.includes("부재중")?'missed':''}">${esc(c.type)}</small></span><small>${esc(c.time)}</small></div>`).join(""):`<div class="info">아직 통화 기록이 없어. 기사 관련 전화가 오면 여기에 남아.</div>`)}
+function runCallTimeline(){
+ let state;try{state=JSON.parse(localStorage.getItem(incidentKey)||"null")}catch(e){state=null}if(!state||!state.startAt)return;
+ let cstate;try{cstate=JSON.parse(localStorage.getItem("galaxyChenleCallState_v1")||"null")}catch(e){cstate=null}if(!cstate)cstate={step:0};
+ const elapsed=Date.now()-state.startAt;
+ while(cstate.step<callTimeline.length&&elapsed>=callTimeline[cstate.step].after){
+  const c=callTimeline[cstate.step],stamp=state.startAt+c.after;
+  if(elapsed-c.after<30000&&!activeCall){showIncomingCall(c.name,c.reason,stamp)}else{addCallLog(c.name,"부재중 전화",stamp)}
+  cstate.step++;
+ }
+ localStorage.setItem("galaxyChenleCallState_v1",JSON.stringify(cstate));
+}
+function startIncidentSystem(){runIncident();runCallTimeline();setInterval(()=>{runIncident();runCallTimeline()},3000)}
 function simplePage(name){page(name,`<div class="form"><h3>${name}</h3><p>옛날 갤럭시 느낌의 ${name} 화면이야.</p>${name==="메모"?`<textarea id="memo" placeholder="메모를 입력해 줘"></textarea><button class="btn" onclick="localStorage.setItem('galaxyMemo',$('memo').value);alert('메모를 저장했어!')">저장</button>`:name==="갤러리"?`<p>가상 사진은 연락처 수정에서 이미지 URL을 넣어 등록할 수 있어.</p>`:`<p>상황극용 화면</p>`}</div>`);if(name==="메모")$("memo").value=localStorage.getItem("galaxyMemo")||""}
 function tick(){let d=new Date(),h=d.getHours(),t=(h%12||12)+":"+String(d.getMinutes()).padStart(2,"0");$("st").textContent=(h>=12?"오후 ":"오전 ")+t;let c=$("clock");if(c)c.textContent=t;let ht=$("ht");if(ht)ht.textContent=t}
 showLock();setInterval(tick,1000);startIncidentSystem();
